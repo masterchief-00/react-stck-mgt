@@ -1,18 +1,31 @@
 import React from "react";
 import styled from "styled-components";
 import { BsCartFill } from "react-icons/bs";
-import { MdLocalShipping,MdMessage } from "react-icons/md";
+import { MdLocalShipping, MdMessage } from "react-icons/md";
+import { AiOutlineAppstoreAdd } from "react-icons/ai";
 import { Colors } from "../Colors";
 import logo from "../assets/images/placeholder-logo-1.png";
 import avatar from "../assets/images/avatar.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { HomeActions } from "../redux/HomeSlice";
 
 const Sidebar = () => {
+  const activeTab = useSelector((state) => state.home.activeTab);
+  const dispatch = useDispatch();
+
+  const handleTabChange = (newTab) => {
+    dispatch(HomeActions.setActiveTab(newTab));
+  };
+
   return (
     <Container>
       <Wrapper>
         <Image src={logo} alt="logo-placeholder" />
         <ServicesWrapper>
-          <ServiceCard>
+          <ServiceCard
+            isSelected={activeTab === "products" ? true : false}
+            onClick={() => handleTabChange("products")}
+          >
             <BsCartFill size={25} color={Colors.primary_variant_x} />
             <label
               style={{
@@ -23,7 +36,10 @@ const Sidebar = () => {
               Products
             </label>
           </ServiceCard>
-          <ServiceCard>
+          <ServiceCard
+            isSelected={activeTab === "shipping" ? true : false}
+            onClick={() => handleTabChange("shipping")}
+          >
             <MdLocalShipping size={25} color={Colors.primary_variant_x} />
             <label
               style={{
@@ -34,7 +50,10 @@ const Sidebar = () => {
               Shipping
             </label>
           </ServiceCard>
-          <ServiceCard>
+          <ServiceCard
+            isSelected={activeTab === "messages" ? true : false}
+            onClick={() => handleTabChange("messages")}
+          >
             <MdMessage size={25} color={Colors.primary_variant_x} />
             <label
               style={{
@@ -45,6 +64,20 @@ const Sidebar = () => {
               Messages
             </label>
           </ServiceCard>
+          <ServiceCard
+            isSelected={activeTab === "add_products" ? true : false}
+            onClick={() => handleTabChange("add_products")}
+          >
+            <AiOutlineAppstoreAdd size={25} color={Colors.primary_variant_x} />
+            <label
+              style={{
+                fontSize: 18,
+                color: Colors.bg,
+              }}
+            >
+              Add products
+            </label>
+          </ServiceCard>
         </ServicesWrapper>
         <User>
           <Avatar src={avatar} alt="user-avatar" />
@@ -53,7 +86,11 @@ const Sidebar = () => {
               John Doe
             </label>
             <label
-              style={{ color: Colors.primary_variant_x, fontSize: "15px", fontWeight: "300" }}
+              style={{
+                color: Colors.primary_variant_x,
+                fontSize: "15px",
+                fontWeight: "300",
+              }}
             >
               Warehouse manager
             </label>
@@ -91,6 +128,8 @@ const ServiceCard = styled.div`
   flex-direction: row;
   gap: 10px;
   padding: 15px;
+  background-color: ${(props) =>
+    props.isSelected ? Colors.text_variant : "transparent"};
   transition: all 0.2s;
 
   &:hover {
@@ -103,7 +142,7 @@ const User = styled.div`
   flex-direction: row;
   gap: 10px;
   padding: 10px;
-  margin-top: 120%;
+  margin-top: 98%;
   transition: all 0.3s;
 
   &:hover {
