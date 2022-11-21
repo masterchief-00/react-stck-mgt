@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BsCartFill } from "react-icons/bs";
 import { MdLocalShipping, MdMessage } from "react-icons/md";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
+import { TbDoorExit } from "react-icons/tb";
 import { Colors } from "../Colors";
 import logo from "../assets/images/placeholder-logo-1.png";
 import avatar from "../assets/images/avatar.jpg";
@@ -11,6 +12,7 @@ import { HomeActions } from "../redux/HomeSlice";
 
 const Sidebar = () => {
   const activeTab = useSelector((state) => state.home.activeTab);
+  const [optionsVisible, setOptionsVisibility] = useState(false);
   const dispatch = useDispatch();
 
   const handleTabChange = (newTab) => {
@@ -79,7 +81,7 @@ const Sidebar = () => {
             </label>
           </ServiceCard>
         </ServicesWrapper>
-        <User>
+        <User onClick={() => setOptionsVisibility(!optionsVisible)}>
           <Avatar src={avatar} alt="user-avatar" />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <label style={{ color: Colors.bg, fontWeight: "bold" }}>
@@ -96,6 +98,21 @@ const Sidebar = () => {
             </label>
           </div>
         </User>
+        {optionsVisible && (
+          <UserOptions>
+            <Action onClick={{}}>
+              <TbDoorExit size={20} color={Colors.primary_variant_x} />
+              <label
+                style={{
+                  fontSize: 15,
+                  color: Colors.bg,
+                }}
+              >
+                Log out
+              </label>
+            </Action>
+          </UserOptions>
+        )}
       </Wrapper>
     </Container>
   );
@@ -143,15 +160,46 @@ const User = styled.div`
   gap: 10px;
   padding: 10px;
   margin-top: 98%;
+  z-index: 4;
   transition: all 0.3s;
 
   &:hover {
     background-color: ${Colors.text_variant};
+    border: none;
+    border-top: solid 1px ${Colors.primary_variant};
   }
 `;
 const Avatar = styled.img`
   height: 50px;
   width: 50px;
   border-radius: 50%;
+`;
+const UserOptions = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: ${Colors.text};
+  height: 200px;
+  width: 230px;
+  margin-left: 5px;
+  top: 367px;
+  border: solid 1px ${Colors.primary_variant};
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom: none;
+  overflow: hidden;
+  z-index: 3;
+`;
+const Action = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 15px;
+  background-color: transparent;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: ${Colors.text_variant};
+  }
 `;
 export default Sidebar;
